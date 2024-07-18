@@ -1,0 +1,12 @@
+[package]
+name = "cli"
+version = "0.1.0"
+authors = ["cppHusky <cpphusky@outlook.com>"]
+edition = "2021"
+
+[dependencies]
+argh = "0.1.12"
+clap = { version = "4.5.9", features = ["derive"] }
+clap_builder = "4.5.9"
+
+[build-dependencies]
