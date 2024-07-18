@@ -1,9 +1,11 @@
 mod cli;
+mod lib;
 mod add;
 mod cover;
 mod query;
 mod remove;
 fn main() {
+	let config=lib::config::Config::new();
 	let cmd:cli::Cmd=argh::from_env();
 	match cmd.nested {
 		cli::Subcmd::Add(_) => {
