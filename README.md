@@ -1,6 +1,6 @@
 # BYRDOCS CLI
 
-> BYRDOCS 综合命令行工具
+> BYRDOCS 集成命令行工具
 
 - 以命令行应用实现文件整理。
 - 以 .json 文件存储文档元信息，并存储于 [archive](https://github.com/byrdocs/byrdocs-archive)。

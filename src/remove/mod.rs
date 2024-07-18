@@ -6,5 +6,5 @@ pub struct Cmd{
 	#[argh(positional)]
 	path:std::path::PathBuf,
 	#[argh(positional,greedy)]
-	rest:Vec<std::path::PathBuf>,
+	paths:Vec<std::path::PathBuf>,
 }
