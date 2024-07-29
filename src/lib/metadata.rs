@@ -9,6 +9,7 @@ pub struct Books{
 	pub publisher:String,
 	pub isbn:String,
 	pub format:String,
+	pub size:u64,
 }
 #[derive(serde::Serialize,serde::Deserialize)]
 pub struct Tests{
@@ -20,6 +21,7 @@ pub struct Tests{
 	pub stage:String,
 	pub kind:String,
 	pub format:String,
+	pub size:u64,
 }
 #[derive(serde::Serialize,serde::Deserialize)]
 pub struct Docs{
@@ -29,6 +31,7 @@ pub struct Docs{
 	pub name:String,
 	pub kind:String,
 	pub format:String,
+	pub size:u64,
 }
 #[derive(serde::Serialize,serde::Deserialize)]
 pub struct Metadata{

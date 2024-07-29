@@ -20,6 +20,7 @@ books_dir="~/BYRDOCS/resources/books"
 tests_dir="~/BYRDOCS/resources/tests"
 docs_dir="~/BYRDOCS/resources/docs"
 covers_dir="~/BYRDOCS/resources/covers"
+metadata_path="~/BYRDOCS/archive/metadata.json"
 
 generate_jpg=true
 generate_png=false
