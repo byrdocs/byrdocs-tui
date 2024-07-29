@@ -1,5 +1,5 @@
 use std::io::{Read,Write};
-#[derive(serde::Serialize,serde::Deserialize)]
+#[derive(serde::Serialize,serde::Deserialize,PartialEq, Eq, PartialOrd, Ord)]
 pub struct Books{
 	pub md5:String,
 	pub name:String,
@@ -11,7 +11,7 @@ pub struct Books{
 	pub format:String,
 	pub size:u64,
 }
-#[derive(serde::Serialize,serde::Deserialize)]
+#[derive(serde::Serialize,serde::Deserialize,PartialEq, Eq, PartialOrd, Ord)]
 pub struct Tests{
 	pub md5:String,
 	pub field:String,
@@ -23,7 +23,7 @@ pub struct Tests{
 	pub format:String,
 	pub size:u64,
 }
-#[derive(serde::Serialize,serde::Deserialize)]
+#[derive(serde::Serialize,serde::Deserialize,PartialEq, Eq, PartialOrd, Ord)]
 pub struct Docs{
 	pub md5:String,
 	pub field:String,
@@ -32,6 +32,11 @@ pub struct Docs{
 	pub kind:String,
 	pub format:String,
 	pub size:u64,
+}
+pub enum Piece{
+	Books(Books),
+	Tests(Tests),
+	Docs(Docs),
 }
 #[derive(serde::Serialize,serde::Deserialize)]
 pub struct Metadata{
@@ -55,4 +60,23 @@ pub fn metadata_write(json_path:std::path::PathBuf,metadata:&Metadata)->Result<(
 		.open(json_path).unwrap();
 	file.write_all(data.as_bytes()).unwrap();
 	return Ok(());
+}
+pub fn metadata_insert(json_path:std::path::PathBuf,piece:Piece)->Result<(),clap::Error>{
+	let mut metadata=metadata_get(json_path.clone()).unwrap();
+	match piece {
+		Piece::Books(piece)=>{
+			metadata.books.push(piece);
+			metadata.books.sort();
+		}
+		Piece::Tests(piece)=>{
+			metadata.tests.push(piece);
+			metadata.tests.sort();
+		}
+		Piece::Docs(piece)=>{
+			metadata.docs.push(piece);
+			metadata.docs.sort();
+		}
+	}
+	metadata_write(json_path.clone(),&metadata).unwrap();
+	Ok(())
 }
