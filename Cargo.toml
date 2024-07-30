@@ -9,6 +9,7 @@ argh = "0.1.12"
 clap = { version = "4.5.9", features = ["derive"] }
 clap_builder = "4.5.9"
 config = "0.14.0"
+display_json = "0.2.1"
 file-format = "0.25.0"
 home = "0.5.9"
 isbnid = "0.1.3"
