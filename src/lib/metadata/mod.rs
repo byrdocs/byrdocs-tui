@@ -19,7 +19,18 @@ pub fn write(json_path:std::path::PathBuf,metadata:&Metadata)->Result<(),serde_j
 	return Ok(());
 }
 pub fn insert(json_path:std::path::PathBuf,piece:Piece)->Result<(),std::io::Error>{
+	let md5_to_query=match &piece {
+		Piece::Books(piece)=>piece.md5.clone(),
+		Piece::Tests(piece)=>piece.md5.clone(),
+		Piece::Docs(piece)=>piece.md5.clone(),
+	};
 	let mut metadata=get(json_path.clone()).unwrap();
+	if metadata.books.iter().any(|book|book.md5==md5_to_query)
+		||metadata.tests.iter().any(|test|test.md5==md5_to_query)
+		||metadata.docs.iter().any(|doc|doc.md5==md5_to_query){
+		eprintln!("The file {md5_to_query} already exists, it will be ignored.");
+		return Ok(())
+	}
 	match piece {
 		Piece::Books(piece)=>{
 			metadata.books.push(piece);
@@ -37,23 +48,23 @@ pub fn insert(json_path:std::path::PathBuf,piece:Piece)->Result<(),std::io::Erro
 	write(json_path.clone(),&metadata).unwrap();
 	Ok(())
 }
-pub fn query(json_path:std::path::PathBuf,category:Piece,data:String)->Result<(),std::io::Error>{
+pub fn query(json_path:std::path::PathBuf,category:Category,data:String,md5_only:bool)->Result<(),std::io::Error>{
 	let mut metadata=get(json_path.clone()).unwrap();
 	match category{
-		Piece::Books(_)=>{
-			let vec:Vec<&Books>=metadata.books.iter().filter(|book|book.contains_data(data.clone())).collect();
+		Category::Books=>{
+			let vec:Vec<&Books>=metadata.books.iter().filter(|book|book.contains_data(data.clone(),md5_only)).collect();
 			for piece in vec{
 				println!("{piece}");
 			}
 		}
-		Piece::Tests(_)=>{
-			let vec:Vec<&Tests>=metadata.tests.iter().filter(|test|test.contains_data(data.clone())).collect();
+		Category::Tests=>{
+			let vec:Vec<&Tests>=metadata.tests.iter().filter(|test|test.contains_data(data.clone(),md5_only)).collect();
 			for piece in vec{
 				println!("{piece}");
 			}
 		}
-		Piece::Docs(_)=>{
-			let vec:Vec<&Docs>=metadata.docs.iter().filter(|docs|docs.contains_data(data.clone())).collect();
+		Category::Docs=>{
+			let vec:Vec<&Docs>=metadata.docs.iter().filter(|docs|docs.contains_data(data.clone(),md5_only)).collect();
 			for piece in vec{
 				println!("{piece}");
 			}

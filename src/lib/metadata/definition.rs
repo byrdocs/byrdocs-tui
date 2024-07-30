@@ -51,15 +51,20 @@ impl Books{
 			size:0,
 		};
 	}
-	pub fn contains_data(&self,data:String)->bool{
-		return self.md5.contains(&data)
-			||self.name.contains(&data)
-			||self.author.contains(&data)
-			||self.translator.contains(&data)
-			||self.edition.to_string().contains(&data)
-			||self.publisher.contains(&data)
-			||self.isbn.contains(&data)
-			||self.format.contains(&data);
+	pub fn contains_data(&self,data:String,md5_only:bool)->bool{
+		if md5_only{
+			return self.md5.contains(&data);
+		}
+		else{
+			return self.md5.contains(&data)
+				||self.name.contains(&data)
+				||self.author.contains(&data)
+				||self.translator.contains(&data)
+				||self.edition.to_string().contains(&data)
+				||self.publisher.contains(&data)
+				||self.isbn.contains(&data)
+				||self.format.contains(&data);
+		}
 	}
 }
 #[derive(
@@ -115,15 +120,20 @@ impl Tests{
 			size:0,
 		}
 	}
-	pub fn contains_data(&self,data:String)->bool{
-		return self.md5.contains(&data)
-			||self.field.contains(&data)
-			||self.school.contains(&data)
-			||self.term.contains(&data)
-			||self.class.contains(&data)
-			||self.stage.contains(&data)
-			||self.kind.contains(&data)
-			||self.format.contains(&data);
+	pub fn contains_data(&self,data:String,md5_only:bool)->bool{
+		if md5_only{
+			return self.md5.contains(&data);
+		}
+		else{
+			return self.md5.contains(&data)
+				||self.field.contains(&data)
+				||self.school.contains(&data)
+				||self.term.contains(&data)
+				||self.class.contains(&data)
+				||self.stage.contains(&data)
+				||self.kind.contains(&data)
+				||self.format.contains(&data);
+		}
 	}
 }
 #[derive(
@@ -171,19 +181,44 @@ impl Docs{
 			size:0,
 		}
 	}
-	pub fn contains_data(&self,data:String)->bool{
-		return self.md5.contains(&data)
-			||self.field.contains(&data)
-			||self.class.contains(&data)
-			||self.name.contains(&data)
-			||self.kind.contains(&data)
-			||self.format.contains(&data)
+	pub fn contains_data(&self,data:String,md5_only:bool)->bool{
+		if md5_only{
+			return self.md5.contains(&data);
+		}
+		else{
+			return self.md5.contains(&data)
+				||self.field.contains(&data)
+				||self.class.contains(&data)
+				||self.name.contains(&data)
+				||self.kind.contains(&data)
+				||self.format.contains(&data);
+		}
 	}
 }
 pub enum Piece{
 	Books(Books),
 	Tests(Tests),
 	Docs(Docs),
+}
+impl From<Books> for Piece{
+	fn from(book:Books)->Self{
+		Piece::Books(book)
+	}
+}
+impl From<Tests> for Piece{
+	fn from(test:Tests)->Self{
+		Piece::Tests(test)
+	}
+}
+impl From<Docs> for Piece{
+	fn from(doc:Docs)->Self{
+		Piece::Docs(doc)
+	}
+}
+pub enum Category{
+	Books,
+	Tests,
+	Docs,
 }
 #[derive(serde::Serialize,serde::Deserialize)]
 pub struct Metadata{
