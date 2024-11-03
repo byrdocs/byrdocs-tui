@@ -1,0 +1,6 @@
+hard_tabs = true
+combine_control_expr = false
+imports_granularity = "Module"
+match_arm_leading_pipes = "Always"
+normalize_comments = true
+reorder_impl_items = true
