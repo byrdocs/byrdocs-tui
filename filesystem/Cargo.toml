@@ -1,9 +1,9 @@
 [package]
-name = "lib-test"
+name = "filesystem"
 version.workspace = true
 authors.workspace = true
 documentation.workspace = true
 edition.workspace = true
 
 [dependencies]
-filesystem = { path = "../filesystem", version = "0.1.0" }
+home = "0.5.9"
