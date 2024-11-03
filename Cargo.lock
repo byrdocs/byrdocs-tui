@@ -5,3 +5,11 @@ version = 3
 [[package]]
 name = "byrdocs-tui"
 version = "0.1.0"
+
+[[package]]
+name = "filesystem"
+version = "0.1.0"
+
+[[package]]
+name = "lib-test"
+version = "0.1.0"

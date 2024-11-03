@@ -1,0 +1,8 @@
+[package]
+name = "byrdocs-tui"
+version.workspace = true
+authors.workspace = true
+documentation.workspace = true
+edition.workspace = true
+
+[dependencies]
