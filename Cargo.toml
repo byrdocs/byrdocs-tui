@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = [ "tui", "lib-test", "filesystem", "config"]
+members = [ "tui", "lib-test", "filesystem", "config", "init"]
 default-members = [ "tui" ]
 
 [workspace.package]

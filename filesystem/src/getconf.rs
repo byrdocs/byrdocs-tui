@@ -1,4 +1,3 @@
-use core::error;
 use std::error::Error;
 use std::path::PathBuf;
 use std::{fs, io};

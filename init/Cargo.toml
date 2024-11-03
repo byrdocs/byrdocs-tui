@@ -1,9 +1,11 @@
 [package]
-name = "byrdocs-tui"
+name = "init"
 version.workspace = true
 authors.workspace = true
 documentation.workspace = true
 edition.workspace = true
 
 [dependencies]
-init = { path = "../init", version = "0.1.0" }
+filesystem = { path = "../filesystem", version = "0.1.0" }
+git2 = "0.19.0"
+home = "0.5.9"
