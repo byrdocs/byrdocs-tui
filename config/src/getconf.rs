@@ -1,26 +1,25 @@
 use std::error::Error;
-use std::{fs, io};
+use std::fs;
 
-use home::home_dir;
-use yaml_rust::{Yaml, YamlLoader};
+use yaml_rust::YamlLoader;
 
-pub fn get_config() -> Result<Vec<Yaml>, Box<dyn Error>> {
-	if let Some(home) = home_dir() {
-		let conf_path = home.join(".config/byrdocs/byrconf.yml");
-		let configs = match fs::read_to_string(conf_path) {
-			| Ok(o) => o,
-			| Err(e) => {
-				return Err(Box::new(e));
-			}
-		};
-		match YamlLoader::load_from_str(configs.as_str()) {
-			| Ok(o) => Ok(o),
-			| Err(e) => Err(Box::new(e)),
+use crate::definition::Config;
+
+pub fn get_config() -> Result<Config, Box<dyn Error>> {
+	let conf_path = shellexpand::tilde("~/.config/byrdocs/byrconf.yml").into_owned();
+	let configs = match fs::read_to_string(conf_path) {
+		| Ok(o) => o,
+		| Err(e) => {
+			return Err(Box::new(e));
 		}
-	} else {
-		Err(Box::new(io::Error::new(
-			io::ErrorKind::Other,
-			String::from("Couldn't extract home_dir()"),
-		)))
+	};
+	match YamlLoader::load_from_str(configs.as_str()) {
+		| Err(e) => Err(Box::new(e)),
+		| Ok(yaml) => {
+			let yaml = yaml.first().unwrap();
+			Ok(Config {
+				root_dir: yaml["root-dir"].as_str().unwrap().to_string(),
+			})
+		}
 	}
 }

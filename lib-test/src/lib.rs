@@ -1,13 +1,13 @@
 #[cfg(test)]
 mod tests {
-	use init::check::check_root_dir;
-	use std::path::PathBuf;
+	use config::{definition::Config, getconf::get_config};
 
 	#[test]
-	fn root_dir() {
-		assert_eq!(
-			PathBuf::from("/home/cpphusky/BYRDOCS"),
-			check_root_dir().unwrap()
-		);
+	fn config() {
+		let config = get_config().unwrap();
+		let expectation = Config {
+			root_dir: String::from(shellexpand::tilde("~/BYRDOCS")),
+		};
+		assert_eq!(config, expectation);
 	}
 }

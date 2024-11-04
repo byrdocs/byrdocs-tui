@@ -6,5 +6,5 @@ documentation.workspace = true
 edition.workspace = true
 
 [dependencies]
-home = "0.5.9"
+shellexpand = "3.1.0"
 yaml-rust = "0.4.5"

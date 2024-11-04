@@ -5,7 +5,6 @@ use std::{
 	path::PathBuf,
 };
 
-use config::getconf::get_config;
 use git2::Repository;
 use home::home_dir;
 
@@ -30,17 +29,11 @@ pub fn create_conf(root_dir: PathBuf) -> Result<PathBuf, Box<dyn Error>> {
 
 /// If root-dir in the configurations not found, then create one.
 /// If root-dir already exists, nothing will be created.
-pub fn create_root_dir() -> Result<PathBuf, Box<dyn Error>> {
-	let yaml = match get_config() {
-		| Ok(o) => o,
-		| Err(e) => return Err(e),
-	};
-	let yaml = yaml.first().unwrap();
-	let root_dir = PathBuf::from(yaml["root-dir"].as_str().unwrap());
+pub fn create_root_dir(root_dir: &PathBuf) -> Result<(), Box<dyn Error>> {
 	if !root_dir.exists() {
 		fs::create_dir(&root_dir)?;
 	}
-	Ok(root_dir)
+	Ok(())
 }
 
 pub fn create_archive_dir(root_dir: &PathBuf) -> Result<PathBuf, Box<dyn Error>> {
@@ -65,10 +58,10 @@ pub fn create_cache_dir(root_dir: &PathBuf) -> Result<PathBuf, Box<dyn Error>> {
 	Ok(cache_dir)
 }
 
-pub fn create_stockpile_dir(root_dir:&PathBuf) -> Result<PathBuf, Box<dyn Error>> {
+pub fn create_stockpile_dir(root_dir: &PathBuf) -> Result<PathBuf, Box<dyn Error>> {
 	let stockpile_dir = root_dir.join("stockpile");
 	println!("Cloning byrdocs-scripts(stockpile) from github...");
-	match Repository::clone(SCRIPTS_UTL,&stockpile_dir) {
+	match Repository::clone(SCRIPTS_UTL, &stockpile_dir) {
 		| Ok(_) => Ok(stockpile_dir),
 		| Err(_) => Err(Box::new(io::Error::new(
 			io::ErrorKind::Other,
