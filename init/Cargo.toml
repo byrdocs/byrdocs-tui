@@ -9,3 +9,4 @@ edition.workspace = true
 filesystem = { path = "../filesystem", version = "0.1.0" }
 git2 = "0.19.0"
 home = "0.5.9"
+yaml-rust = "0.4.5"
