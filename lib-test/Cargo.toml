@@ -6,5 +6,5 @@ documentation.workspace = true
 edition.workspace = true
 
 [dependencies]
-filesystem = { path = "../filesystem", version = "0.1.0" }
+config = { path = "../config", version = "0.1.0" }
 init = { path = "../init", version = "0.1.0" }

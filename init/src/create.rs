@@ -5,7 +5,7 @@ use std::{
 	path::PathBuf,
 };
 
-use filesystem::getconf::get_config;
+use config::getconf::get_config;
 use git2::Repository;
 use home::home_dir;
 

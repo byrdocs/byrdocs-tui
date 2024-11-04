@@ -6,4 +6,5 @@ documentation.workspace = true
 edition.workspace = true
 
 [dependencies]
-filesystem = { path = "../filesystem", version = "0.1.0" }
+home = "0.5.9"
+yaml-rust = "0.4.5"

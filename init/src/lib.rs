@@ -4,7 +4,7 @@ use check::{check_root_dir, check_subdirctory};
 use create::{
 	create_archive_dir, create_cache_dir, create_conf, create_root_dir, create_stockpile_dir,
 };
-use filesystem::getconf::get_config;
+use config::getconf::get_config;
 
 pub mod check;
 pub mod create;

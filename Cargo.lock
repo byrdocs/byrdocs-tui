@@ -30,13 +30,6 @@ dependencies = [
 name = "config"
 version = "0.1.0"
 dependencies = [
- "filesystem",
-]
-
-[[package]]
-name = "filesystem"
-version = "0.1.0"
-dependencies = [
  "home",
  "yaml-rust",
 ]
@@ -88,7 +81,7 @@ dependencies = [
 name = "init"
 version = "0.1.0"
 dependencies = [
- "filesystem",
+ "config",
  "git2",
  "home",
  "yaml-rust",
@@ -107,7 +100,7 @@ dependencies = [
 name = "lib-test"
 version = "0.1.0"
 dependencies = [
- "filesystem",
+ "config",
  "init",
 ]
 

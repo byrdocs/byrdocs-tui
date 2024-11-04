@@ -1,6 +1,8 @@
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
-	let _ = init::check();
-	Ok(())
+	match init::check() {
+		| Ok(_) => Ok(()),
+		| Err(e) => Err(e),
+	}
 }

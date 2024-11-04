@@ -2,7 +2,7 @@ use std::error::Error;
 use std::io;
 use std::path::PathBuf;
 
-use filesystem::getconf::get_config;
+use config::getconf::get_config;
 
 pub fn check_root_dir() -> Result<PathBuf, Box<dyn Error>> {
 	let yaml = match get_config() {
