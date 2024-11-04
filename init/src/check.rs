@@ -20,7 +20,7 @@ pub fn check_root_dir() -> Result<PathBuf, Box<dyn Error>> {
 	Ok(root_dir)
 }
 
-pub fn check_subdirctory(root_dir: PathBuf, sub_dir: &str) -> Result<(), Box<dyn Error>> {
+pub fn check_subdirctory(root_dir:&PathBuf, sub_dir: &str) -> Result<(), Box<dyn Error>> {
 	let subdir = root_dir.join(sub_dir);
 	if subdir.exists() {
 		Ok(())

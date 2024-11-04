@@ -28,18 +28,18 @@ pub fn check() -> Result<PathBuf, Box<dyn Error>> {
 			| Err(e) => return Err(e),
 		},
 	};
-	if let Err(_) = check_subdirctory(root_dir.clone(), "archive") {
-		if let Err(e) = create_archive_dir(root_dir.clone()) {
+	if let Err(_) = check_subdirctory(&root_dir, "archive") {
+		if let Err(e) = create_archive_dir(&root_dir) {
 			return Err(e);
 		}
 	}
-	if let Err(_) = check_subdirctory(root_dir.clone(), ".cache") {
-		if let Err(e) = create_cache_dir(root_dir.clone()) {
+	if let Err(_) = check_subdirctory(&root_dir, ".cache") {
+		if let Err(e) = create_cache_dir(&root_dir) {
 			return Err(e);
 		}
 	}
-	if let Err(_) = check_subdirctory(root_dir.clone(), "stockpile") {
-		if let Err(e) = create_stockpile_dir(root_dir.clone()) {
+	if let Err(_) = check_subdirctory(&root_dir, "stockpile") {
+		if let Err(e) = create_stockpile_dir(&root_dir) {
 			return Err(e);
 		}
 	}
