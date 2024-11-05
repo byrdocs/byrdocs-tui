@@ -6,4 +6,4 @@ documentation.workspace = true
 edition.workspace = true
 
 [dependencies]
-md5 = "0.7.0"
+rust-crypto = "0.2.36"
