@@ -9,18 +9,22 @@ use create::{
 pub mod check;
 pub mod create;
 
-pub fn check(config: Config) -> Result<(), Box<dyn Error>> {
-	if let Err(_) = get_config() {
-		println!("Warning: It seems that There is no BYRDOCS workspace in your computer, or the configuration file is deleted.");
-		println!("Input a directory so that we can create the workspace: ");
-		let mut input = String::new();
-		io::stdin()
-			.read_line(&mut input)
-			.expect("Failed to read the path");
-		if let Err(e) = create_conf(PathBuf::from(shellexpand::tilde(&input).into_owned())) {
-			return Err(e);
+pub fn check() -> Result<Config, Box<dyn Error>> {
+	let config = match get_config() {
+		| Ok(conf) => conf,
+		| Err(_) => {
+			println!("Warning: It seems that There is no BYRDOCS workspace in your computer, or the configuration file is deleted.");
+			println!("Input a directory so that we can create the workspace: ");
+			let mut input = String::new();
+			io::stdin()
+				.read_line(&mut input)
+				.expect("Failed to read the path");
+			match create_conf(PathBuf::from(shellexpand::tilde(&input).into_owned())) {
+				| Ok(_) => get_config().unwrap(),
+				| Err(e) => return Err(e),
+			}
 		}
-	}
+	};
 	let root_dir = PathBuf::from(match check_root_dir(&PathBuf::from(&config.root_dir)) {
 		| Ok(_) => &config.root_dir,
 		| Err(_) => match create_root_dir(&PathBuf::from(&config.root_dir)) {
@@ -43,5 +47,5 @@ pub fn check(config: Config) -> Result<(), Box<dyn Error>> {
 			return Err(e);
 		}
 	}
-	Ok(())
+	Ok(config)
 }

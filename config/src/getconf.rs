@@ -19,6 +19,9 @@ pub fn get_config() -> Result<Config, Box<dyn Error>> {
 			let yaml = yaml.first().unwrap();
 			Ok(Config {
 				root_dir: yaml["root-dir"].as_str().unwrap().to_string(),
+				archive_dir: yaml["archive-dir"].as_str().unwrap().to_string(),
+				cache_dir: yaml["cache-dir"].as_str().unwrap().to_string(),
+				stockpile_dir: yaml["stockpile-dir"].as_str().unwrap().to_string(),
 			})
 		}
 	}

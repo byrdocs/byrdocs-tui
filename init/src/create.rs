@@ -6,7 +6,6 @@ use std::{
 };
 
 use git2::Repository;
-use home::home_dir;
 
 const ARCHIVE_URL: &str = "https://github.com/byrdocs/byrdocs-archive.git";
 const SCRIPTS_UTL: &str = "https://github.com/byrdocs/byrdocs-scripts.git";
@@ -14,17 +13,17 @@ const SCRIPTS_UTL: &str = "https://github.com/byrdocs/byrdocs-scripts.git";
 /// create_conf() create or recreate the configurations.
 /// Settings may be overwritten. Use it cautiously!
 pub fn create_conf(root_dir: PathBuf) -> Result<PathBuf, Box<dyn Error>> {
-	if let Some(home) = home_dir() {
-		let conf_path = home.join(".config/byrdocs/byrconf.yml");
-		let mut conf = fs::File::create(&conf_path)?;
-		writeln!(conf, "root-dir: {}", root_dir.to_str().unwrap())?;
-		Ok(conf_path)
-	} else {
-		Err(Box::new(io::Error::new(
-			io::ErrorKind::Other,
-			String::from("Couldn't extract home_dir()"),
-		)))
-	}
+	let conf_path = PathBuf::from(shellexpand::tilde("~/.config/byrdocs/byrconf.yml").into_owned());
+	let mut conf = fs::File::create(&conf_path)?;
+	writeln!(conf, "root-dir: {}", root_dir.to_str().unwrap().trim())?;
+	writeln!(conf, "archive-dir: {}/archive", root_dir.to_str().unwrap().trim())?;
+	writeln!(conf, "cache-dir: {}/.cache", root_dir.to_str().unwrap().trim())?;
+	writeln!(
+		conf,
+		"stockpile-dir: {}/stockpile",
+		root_dir.to_str().unwrap().trim()
+	)?;
+	Ok(conf_path)
 }
 
 /// If root-dir in the configurations not found, then create one.
