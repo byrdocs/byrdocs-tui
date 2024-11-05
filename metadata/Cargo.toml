@@ -1,0 +1,9 @@
+[package]
+name = "metadata"
+version.workspace = true
+authors.workspace = true
+documentation.workspace = true
+edition.workspace = true
+
+[dependencies]
+md5 = "0.7.0"

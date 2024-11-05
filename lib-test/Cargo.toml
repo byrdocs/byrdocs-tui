@@ -8,5 +8,5 @@ edition.workspace = true
 [dependencies]
 config = { path = "../config", version = "0.1.0" }
 init = { path = "../init", version = "0.1.0" }
-fs = { path = "../fs", version = "0.1.0" }
+metadata = { path = "../metadata", version = "0.1.0" }
 shellexpand = "3.1.0"
