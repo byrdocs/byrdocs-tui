@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-	use std::fs::File;
+	use std::{fs::File, io::Write, path::PathBuf};
 
 	use config::{definition::Config, getconf::get_config};
 	use metadata::md5sum::md5sum;
@@ -23,5 +23,9 @@ mod tests {
 		let md5 = md5sum(file).unwrap();
 		let expectation: u128 = 0x2b181915816194cb3cb82ae809f89dba;
 		assert_eq!(md5, expectation);
+	}
+	#[test]
+	fn workspace_readme(){
+		let _=init::readme::gen_readme(&PathBuf::from(shellexpand::tilde("~/BYRDOCS/tui/docs/workspace-readme.md").into_owned()));
 	}
 }

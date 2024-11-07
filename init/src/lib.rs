@@ -1,13 +1,19 @@
-use std::{error::Error, io, path::PathBuf};
+use std::{
+	error::Error,
+	io,
+	path::PathBuf,
+};
 
-use check::check_dir;
+use check::{check_dir, check_file};
 use config::{definition::Config, getconf::get_config};
 use create::{
 	create_archive_dir, create_cache_dir, create_conf, create_root_dir, create_stockpile_dir,
 };
+use readme::gen_readme;
 
 pub mod check;
 pub mod create;
+pub mod readme;
 
 pub fn check() -> Result<Config, Box<dyn Error>> {
 	let config = match get_config() {
@@ -30,6 +36,11 @@ pub fn check() -> Result<Config, Box<dyn Error>> {
 			return Err(e);
 		};
 	};
+	if let Err(_) = check_file(&PathBuf::from(&config.root_dir).join("README.md")) {
+		if let Err(e) = gen_readme(&PathBuf::from(&config.root_dir).join("README.md")) {
+			return Err(e);
+		}
+	}
 	if let Err(_) = check_dir(&PathBuf::from(&config.archive_dir)) {
 		if let Err(e) = create_archive_dir(&PathBuf::from(&config.archive_dir)) {
 			return Err(e);
