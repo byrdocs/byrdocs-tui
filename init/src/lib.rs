@@ -1,8 +1,4 @@
-use std::{
-	error::Error,
-	io,
-	path::PathBuf,
-};
+use std::{error::Error, io, path::PathBuf};
 
 use check::{check_dir, check_file};
 use config::{definition::Config, getconf::get_config};
