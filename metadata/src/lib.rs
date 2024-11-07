@@ -1,3 +1,2 @@
-pub mod definition;
+pub mod definitions;
 pub mod md5sum;
-pub mod yml_gen;
