@@ -8,5 +8,7 @@ edition.workspace = true
 [dependencies]
 config = { path = "../config", version = "0.1.0" }
 git2 = "0.19.0"
+metadata = { path = "../metadata", version = "0.1.0" }
+rust-crypto = "0.2.36"
 shellexpand = "3.1.0"
 yaml-rust = "0.4.5"

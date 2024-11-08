@@ -8,7 +8,7 @@ pub fn check_file(file: &PathBuf) -> Result<(), Box<dyn Error>> {
 	} else {
 		Err(Box::new(io::Error::new(
 			io::ErrorKind::NotFound,
-			format!("{} doeesn't exist.", file.to_str().unwrap()),
+			format!("{} doesn't exist.", file.to_str().unwrap()),
 		)))
 	}
 }

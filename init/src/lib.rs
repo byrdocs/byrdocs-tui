@@ -1,11 +1,11 @@
 use std::{error::Error, io, path::PathBuf};
 
-use check::{check_dir, check_file};
+use check::check_dir;
 use config::{definition::Config, getconf::get_config};
 use create::{
 	create_archive_dir, create_cache_dir, create_conf, create_root_dir, create_stockpile_dir,
 };
-use readme::gen_readme;
+use readme::{check_readme, gen_readme};
 
 pub mod check;
 pub mod create;
@@ -32,7 +32,7 @@ pub fn check() -> Result<Config, Box<dyn Error>> {
 			return Err(e);
 		};
 	};
-	if let Err(_) = check_file(&PathBuf::from(&config.root_dir).join("README.md")) {
+	if let Err(_) = check_readme(&PathBuf::from(&config.root_dir).join("README.md")) {
 		if let Err(e) = gen_readme(&PathBuf::from(&config.root_dir).join("README.md")) {
 			return Err(e);
 		}

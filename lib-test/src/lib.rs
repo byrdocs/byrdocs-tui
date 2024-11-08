@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-	use std::{fs::File, path::PathBuf};
+	use std::fs::File;
 
 	use config::{definition::Config, getconf::get_config};
 	use metadata::md5sum::md5sum;
