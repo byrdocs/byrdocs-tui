@@ -1,10 +1,9 @@
 use std::{error::Error, io, path::PathBuf};
 
 use check::check_dir;
+use config::genconf::create_conf;
 use config::{definition::Config, getconf::get_config};
-use create::{
-	create_archive_dir, create_cache_dir, create_conf, create_root_dir, create_stockpile_dir,
-};
+use create::{create_archive_dir, create_cache_dir, create_root_dir, create_stockpile_dir};
 use readme::{check_readme, gen_readme};
 
 pub mod check;

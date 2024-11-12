@@ -1,38 +1,9 @@
-use std::{
-	error::Error,
-	fs,
-	io::{self, Write},
-	path::PathBuf,
-};
+use std::{error::Error, fs, io, path::PathBuf};
 
 use git2::Repository;
 
 const ARCHIVE_URL: &str = "https://github.com/byrdocs/byrdocs-archive.git";
 const SCRIPTS_UTL: &str = "https://github.com/byrdocs/byrdocs-scripts.git";
-
-/// create_conf() create or recreate the configurations.
-/// Settings may be overwritten. Use it cautiously!
-pub fn create_conf(root_dir: PathBuf) -> Result<PathBuf, Box<dyn Error>> {
-	let conf_path = PathBuf::from(shellexpand::tilde("~/.config/byrdocs/byrconf.yml").into_owned());
-	let mut conf = fs::File::create(&conf_path)?;
-	writeln!(conf, "root-dir: {}", root_dir.to_str().unwrap().trim())?;
-	writeln!(
-		conf,
-		"archive-dir: {}/archive",
-		root_dir.to_str().unwrap().trim()
-	)?;
-	writeln!(
-		conf,
-		"cache-dir: {}/.cache",
-		root_dir.to_str().unwrap().trim()
-	)?;
-	writeln!(
-		conf,
-		"stockpile-dir: {}/stockpile",
-		root_dir.to_str().unwrap().trim()
-	)?;
-	Ok(conf_path)
-}
 
 /// If root-dir in the configurations not found, then create one.
 /// If root-dir already exists, nothing will be created.

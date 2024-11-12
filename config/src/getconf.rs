@@ -1,5 +1,6 @@
 use std::error::Error;
 use std::fs;
+use std::io;
 
 use yaml_rust::YamlLoader;
 
@@ -7,10 +8,13 @@ use crate::definition::Config;
 
 pub fn get_config() -> Result<Config, Box<dyn Error>> {
 	let conf_path = shellexpand::tilde("~/.config/byrdocs/byrconf.yml").into_owned();
-	let configs = match fs::read_to_string(conf_path) {
+	let configs = match fs::read_to_string(&conf_path) {
 		| Ok(o) => o,
-		| Err(e) => {
-			return Err(Box::new(e));
+		| Err(_) => {
+			return Err(Box::new(io::Error::new(
+				io::ErrorKind::NotFound,
+				format!("Config file {} doesn't exist.", conf_path),
+			)));
 		}
 	};
 	match YamlLoader::load_from_str(configs.as_str()) {
