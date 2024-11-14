@@ -43,3 +43,21 @@ pub enum DocContentType {
 	知识点,
 	课件,
 }
+impl Course {
+	pub fn new() -> Course {
+		Course {
+			r#type: None,
+			name: String::new(),
+		}
+	}
+}
+impl Time {
+	pub fn new() -> Time {
+		Time {
+			start: String::new(),
+			end: String::new(),
+			semester: None,
+			stage: None,
+		}
+	}
+}

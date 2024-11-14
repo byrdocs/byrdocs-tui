@@ -6,14 +6,36 @@ pub struct Test {
 	md5: u128,
 	title: String,
 	college: Option<Vec<String>>,
-	course: CourseType,
+	course: Course,
 	time: Time,
 	filetype: FileType,
 	content: Vec<TestContentType>,
 }
 
 impl Test {
-	fn get_file_info(&mut self, path: &PathBuf) -> Result<(), Box<dyn Error>> {
+	pub fn new() -> Test {
+		Test {
+			md5: 0,
+			title: String::new(),
+			college: None,
+			course: Course::new(),
+			time: Time::new(),
+			filetype: FileType::Pdf,
+			content: Vec::<TestContentType>::new(),
+		}
+	}
+	pub fn from(md5: u128, filetype: FileType) -> Test {
+		Test {
+			md5,
+			title: String::new(),
+			college: None,
+			course: Course::new(),
+			time: Time::new(),
+			filetype,
+			content: Vec::<TestContentType>::new(),
+		}
+	}
+	pub fn get_file_info(&mut self, path: &PathBuf) -> Result<(), Box<dyn Error>> {
 		self.filetype = match path.extension().unwrap().to_str() {
 			| Some("pdf") => FileType::Pdf,
 			| Some("zip") => FileType::Zip,
@@ -34,40 +56,40 @@ impl Test {
 		self.md5 = md5sum(&file)?;
 		Ok(())
 	}
-	fn get_title(&mut self, title: &String) -> Result<(), Box<dyn Error>> {
+	pub fn get_title(&mut self, title: &String) -> Result<(), Box<dyn Error>> {
 		Ok(self.title = title.clone())
 	}
-	fn get_college(&mut self, college: &Option<Vec<String>>) -> Result<(), Box<dyn Error>> {
+	pub fn get_college(&mut self, college: &Option<Vec<String>>) -> Result<(), Box<dyn Error>> {
 		Ok(self.college = college.clone())
 	}
-	fn get_course(&mut self, course: &CourseType) -> Result<(), Box<dyn Error>> {
+	pub fn get_course(&mut self, course: &Course) -> Result<(), Box<dyn Error>> {
 		Ok(self.course = course.clone())
 	}
-	fn get_time(&mut self, time: &Time) -> Result<(), Box<dyn Error>> {
+	pub fn get_time(&mut self, time: &Time) -> Result<(), Box<dyn Error>> {
 		Ok(self.time = time.clone())
 	}
-	fn get_content(&mut self, content: &Vec<TestContentType>) -> Result<(), Box<dyn Error>> {
+	pub fn get_content(&mut self, content: &Vec<TestContentType>) -> Result<(), Box<dyn Error>> {
 		Ok(self.content = content.clone())
 	}
-	fn md5(&self) -> u128 {
+	pub fn md5(&self) -> u128 {
 		self.md5
 	}
-	fn title(&self) -> String {
+	pub fn title(&self) -> String {
 		self.title.clone()
 	}
-	fn college(&self) -> Option<Vec<String>> {
+	pub fn college(&self) -> Option<Vec<String>> {
 		self.college.clone()
 	}
-	fn course(&self) -> CourseType {
+	pub fn course(&self) -> Course {
 		self.course.clone()
 	}
-	fn time(&self) -> Time {
+	pub fn time(&self) -> Time {
 		self.time.clone()
 	}
-	fn filetype(&self) -> FileType {
+	pub fn filetype(&self) -> FileType {
 		self.filetype.clone()
 	}
-	fn content(&self) -> Vec<TestContentType> {
+	pub fn content(&self) -> Vec<TestContentType> {
 		self.content.clone()
 	}
 }
