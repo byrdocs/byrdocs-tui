@@ -361,6 +361,7 @@ name = "metadata"
 version = "0.1.0"
 dependencies = [
  "rust-crypto",
+ "yaml-rust",
 ]
 
 [[package]]
