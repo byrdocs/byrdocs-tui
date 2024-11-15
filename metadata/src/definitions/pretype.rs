@@ -50,6 +50,16 @@ impl Course {
 			name: String::new(),
 		}
 	}
+	pub fn from<T: Into<Option<CourseType>>>(name: String, r#type: T) -> Course {
+		if let Some(t) = r#type.into() {
+			Course {
+				name,
+				r#type: Some(t),
+			}
+		} else {
+			Course { name, r#type: None }
+		}
+	}
 }
 impl Time {
 	pub fn new() -> Time {
@@ -58,6 +68,19 @@ impl Time {
 			end: String::new(),
 			semester: None,
 			stage: None,
+		}
+	}
+	pub fn from(
+		start: String,
+		end: String,
+		semester: Option<SemesterType>,
+		stage: Option<StageType>,
+	) -> Time {
+		Time {
+			start,
+			end,
+			semester,
+			stage,
 		}
 	}
 }

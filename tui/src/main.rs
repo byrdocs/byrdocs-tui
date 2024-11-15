@@ -13,7 +13,11 @@ mod tests {
 	use std::fs::File;
 
 	use config::{definition::Config, getconf::get_config};
-	use metadata::{definitions::{pretype::FileType, DocType}, md5sum::md5sum, read::read};
+	use metadata::{
+		definitions::{pretype::FileType, DocType},
+		md5sum::md5sum,
+		read::read,
+	};
 
 	#[test]
 	fn config() {
@@ -44,6 +48,7 @@ mod tests {
 			assert_eq!(book.authors()[0], "Лифшиц, Евгений Михайлович(粟弗席兹)");
 			assert_eq!(book.authors()[1], "Питаевский, Лев Петрович(皮塔耶夫斯基)");
 			if let Some(translators) = book.translators() {
+				assert_eq!(translators.len(), 3);
 				assert_eq!(translators[0], "徐锡申");
 				assert_eq!(translators[1], "徐春华");
 				assert_eq!(translators[2], "黄京民");
@@ -56,9 +61,46 @@ mod tests {
 			if let Some(isbn) = book.isbn() {
 				assert_eq!(isbn[0], "978-7-04-023069-7");
 			}
-			assert_eq!(book.filetype(),FileType::Pdf);
+			assert_eq!(book.filetype(), FileType::Pdf);
 		} else {
-			assert!(false, "The book isn't recognized as a book.")
+			assert!(false, "The book isn't recognized as a book");
+		}
+	}
+	#[test]
+	fn metadata_test() {
+		if let Ok(DocType::Test(test)) = read(&String::from(shellexpand::tilde(
+			"~/BYRDOCS/tui/.assets/154a930358251fe7bf774dd194bd9a00.yml",
+		))) {
+			assert_eq!(test.md5(), 0x154a930358251fe7bf774dd194bd9a00);
+			assert_eq!(test.title(), "2023-2024 第二学期 概率论与数理统计 期末");
+			if let Some(college) = test.college() {
+				assert_eq!(college.len(), 3);
+				assert_eq!(college[0], "人工智能学院");
+				assert_eq!(college[1], "自动化学院");
+				assert_eq!(college[2], "信息与通信工程学院");
+			} else {
+				assert!(false, "colleges of {} should not be empty", test.md5());
+			}
+			assert_eq!(test.course().r#type, None);
+			assert_eq!(test.course().name, "概率论与数理统计");
+			assert_eq!(test.time().start, "2023");
+			assert_eq!(test.time().end, "2024");
+			assert_eq!(
+				test.time().semester,
+				Some(metadata::definitions::pretype::SemesterType::Second)
+			);
+			assert_eq!(
+				test.time().stage,
+				Some(metadata::definitions::pretype::StageType::期末)
+			);
+			assert_eq!(test.filetype(), FileType::Pdf);
+			assert_eq!(test.content().len(), 1);
+			assert_eq!(
+				test.content()[0],
+				metadata::definitions::pretype::TestContentType::原题
+			);
+		} else {
+			assert!(false, "The test isn't recognized as test");
 		}
 	}
 }

@@ -59,8 +59,8 @@ impl Test {
 	pub fn get_title(&mut self, title: &String) -> Result<(), Box<dyn Error>> {
 		Ok(self.title = title.clone())
 	}
-	pub fn get_college(&mut self, college: &Option<Vec<String>>) -> Result<(), Box<dyn Error>> {
-		Ok(self.college = college.clone())
+	pub fn get_college(&mut self, college: &Vec<String>) -> Result<(), Box<dyn Error>> {
+		Ok(self.college = Some(college.clone()))
 	}
 	pub fn get_course(&mut self, course: &Course) -> Result<(), Box<dyn Error>> {
 		Ok(self.course = course.clone())

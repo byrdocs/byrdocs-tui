@@ -59,7 +59,7 @@ pub fn read(yaml: &Yaml) -> Result<Book, Box<dyn Error>> {
 		if translators.len() > 0 {
 			let mut vec = Vec::<String>::new();
 			for t in translators {
-				vec.push(String::from(t.as_str().unwrap()));
+				vec.push(t.as_str().unwrap().to_string());
 			}
 			book.get_translators(&vec)?
 		}
