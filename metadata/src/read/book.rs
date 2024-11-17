@@ -5,56 +5,55 @@ use yaml_rust::Yaml;
 use crate::definitions::{book::Book, pretype::FileType};
 
 pub fn read(yaml: &Yaml) -> Result<Book, Box<dyn Error>> {
+	let md5sum = match u128::from_str_radix(yaml["id"].as_str().unwrap(), 16) {
+		| Ok(u) => u,
+		| Err(e) => return Err(Box::new(e)),
+	};
 	let mut book = Book::from(
-		u128::from_str_radix(yaml["id"].as_str().unwrap(), 16)?,
+		md5sum,
 		match yaml["data"]["filetype"].as_str() {
 			| Some("pdf") => FileType::Pdf,
-			| Some("zip") => FileType::Zip,
 			| Some(ext) => {
 				return Err(Box::new(io::Error::new(
 					io::ErrorKind::Other,
-					format!("Unsupported file extension: {}", ext),
+					format!("Unsupported file extension {} for book {}", ext, md5sum),
 				)))
 			}
 			| None => {
 				return Err(Box::new(io::Error::new(
 					io::ErrorKind::NotFound,
-					format!("File extension not found"),
+					format!("File extension not found for {}", md5sum),
 				)))
 			}
 		},
 	);
-	let _ = match yaml["data"]["title"].as_str() {
-		| Some(title) => book.get_title(&String::from(title))?,
-		| None => {
-			return Err(Box::new(io::Error::new(
-				io::ErrorKind::InvalidData,
-				format!("Invalid title of {}", book.md5()),
-			)))
-		}
+	if let Some(title) = yaml["data"]["title"].as_str() {
+		book.get_title(&title.to_string())?
+	} else {
+		return Err(Box::new(io::Error::new(
+			io::ErrorKind::InvalidData,
+			format!("Title of {} must be not empty", book.md5()),
+		)));
 	};
-	let _ = match yaml["data"]["authors"].as_vec() {
-		| Some(authors) => {
-			if authors.len() > 0 {
-				let mut vec = Vec::<String>::new();
-				for a in authors {
-					vec.push(String::from(a.as_str().unwrap()));
-				}
-				book.get_authors(&vec)?
-			} else {
-				return Err(Box::new(io::Error::new(
-					io::ErrorKind::InvalidData,
-					format!("Authors of {} must be not empty", book.md5()),
-				)));
+	if let Some(authors) = yaml["data"]["authors"].as_vec() {
+		if authors.len() > 0 {
+			let mut vec = Vec::<String>::new();
+			for a in authors {
+				vec.push(String::from(a.as_str().unwrap()));
 			}
-		}
-		| None => {
+			book.get_authors(&vec)?
+		} else {
 			return Err(Box::new(io::Error::new(
 				io::ErrorKind::InvalidData,
-				format!("Invalid authors of {}", book.md5()),
-			)))
+				format!("Authors of {} must be not empty", book.md5()),
+			)));
 		}
-	};
+	} else {
+		return Err(Box::new(io::Error::new(
+			io::ErrorKind::InvalidData,
+			format!("Authors of {} must be not empty", book.md5()),
+		)));
+	}
 	if let Some(translators) = yaml["data"]["translators"].as_vec() {
 		if translators.len() > 0 {
 			let mut vec = Vec::<String>::new();

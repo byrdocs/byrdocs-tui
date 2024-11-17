@@ -14,13 +14,11 @@ mod tests {
 
 	use config::{definition::Config, getconf::get_config};
 	use metadata::{
-		definitions::{
-			pretype::FileType,
-			DocType,
-		},
+		definitions::pretype::FileType,
 		md5sum::md5sum,
-		read::read,
+		read::{book, doc, test},
 	};
+	use yaml_rust::YamlLoader;
 
 	#[test]
 	fn config() {
@@ -43,10 +41,15 @@ mod tests {
 	}
 	#[test]
 	fn metadata_book() {
-		let _ = match read(&String::from(shellexpand::tilde(
-			"~/BYRDOCS/tui/.assets/06fa27d50ba4a4baae1b665ea48fd677.yml",
-		))) {
-			| Ok(DocType::Book(book)) => {
+		let _ = match book::read(
+			&YamlLoader::load_from_str(include_str!(
+				"../../.assets/06fa27d50ba4a4baae1b665ea48fd677.yml",
+			))
+			.unwrap()
+			.first()
+			.unwrap(),
+		) {
+			| Ok(book) => {
 				assert_eq!(book.md5(), 0x06fa27d50ba4a4baae1b665ea48fd677);
 				assert_eq!(book.title(), "理论物理学教程 第10卷 物理动理学 第2版");
 				assert_eq!(book.authors().len(), 2);
@@ -68,16 +71,20 @@ mod tests {
 				}
 				assert_eq!(book.filetype(), FileType::Pdf);
 			}
-			| Ok(_) => assert!(false, "The book isn't recognized as a book"),
 			| Err(e) => assert!(false, "{}", e),
 		};
 	}
 	#[test]
 	fn metadata_test() {
-		let _ = match read(&String::from(shellexpand::tilde(
-			"~/BYRDOCS/tui/.assets/154a930358251fe7bf774dd194bd9a00.yml",
-		))) {
-			| Ok(DocType::Test(test)) => {
+		let _ = match test::read(
+			&YamlLoader::load_from_str(include_str!(
+				"../../.assets/154a930358251fe7bf774dd194bd9a00.yml",
+			))
+			.unwrap()
+			.first()
+			.unwrap(),
+		) {
+			| Ok(test) => {
 				assert_eq!(test.md5(), 0x154a930358251fe7bf774dd194bd9a00);
 				assert_eq!(test.title(), "2023-2024 第二学期 概率论与数理统计 期末");
 				if let Some(college) = test.college() {
@@ -107,16 +114,20 @@ mod tests {
 					metadata::definitions::pretype::TestContentType::原题
 				)
 			}
-			| Ok(_) => assert!(false, "The test isn't recognized as test"),
 			| Err(e) => assert!(false, "{}", e),
 		};
 	}
 	#[test]
 	fn metadata_doc() {
-		let _ = match read(&String::from(shellexpand::tilde(
-			"~/BYRDOCS/tui/.assets/3d6fa4f7305fb91e9c014e468037310c.yml",
-		))) {
-			| Ok(DocType::Doc(doc)) => {
+		let _ = match doc::read(
+			&YamlLoader::load_from_str(include_str!(
+				"../../.assets/3d6fa4f7305fb91e9c014e468037310c.yml",
+			))
+			.unwrap()
+			.first()
+			.unwrap(),
+		) {
+			| Ok(doc) => {
 				assert_eq!(doc.md5(), 0x3d6fa4f7305fb91e9c014e468037310c);
 				assert_eq!(doc.course().len(), 1);
 				assert_eq!(doc.course()[0].r#type, None);
@@ -131,7 +142,6 @@ mod tests {
 					metadata::definitions::pretype::DocContentType::答案
 				)
 			}
-			| Ok(_) => assert!(false, "The doc isn't recognized as doc"),
 			| Err(e) => assert!(false, "{}", e),
 		};
 	}

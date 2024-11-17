@@ -16,6 +16,7 @@ dependencies = [
  "init",
  "metadata",
  "shellexpand",
+ "yaml-rust",
 ]
 
 [[package]]
