@@ -22,6 +22,11 @@ pub fn read(path: &String) -> Result<DocType, Box<dyn Error>> {
 		| Ok(o) => o.first().unwrap().clone(),
 		| Err(e) => return Err(Box::new(e)),
 	};
+	println!(
+		"{}: {}",
+		yaml["id"].as_str().unwrap(),
+		yaml["type"].as_str().unwrap()
+	);
 	match yaml["type"].as_str() {
 		| Some("book") => match book::read(&yaml) {
 			| Ok(o) => Ok(DocType::Book(o)),

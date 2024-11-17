@@ -47,26 +47,27 @@ pub fn read(yaml: &Yaml) -> Result<Test, Box<dyn Error>> {
 	}
 	let _ = match yaml["data"]["course"].as_hash() {
 		| Some(course) => {
+			let r#type = match course[&Yaml::from_str("type")].as_str() {
+				| Some("本科") => Some(CourseType::本科),
+				| Some("研究生") => Some(CourseType::研究生),
+				| Some(_) => {
+					return Err(Box::new(io::Error::new(
+						io::ErrorKind::InvalidData,
+						format!("Invalid type of course of {}", test.md5()),
+					)));
+				}
+				| None => None,
+			};
 			let name = match course[&Yaml::from_str("name")].as_str() {
 				| Some(n) => n.to_string(),
 				| None => {
 					return Err(Box::new(io::Error::new(
 						io::ErrorKind::InvalidData,
-						format!("Invalid course name of {}", test.md5()),
+						format!("Invalid name of course of {}", test.md5()),
 					)))
 				}
 			};
-			let _ = match course[&Yaml::from_str("type")].as_str() {
-				| Some("本科") => test.get_course(&Course::from(name, CourseType::本科)),
-				| Some("研究生") => test.get_course(&Course::from(name, CourseType::研究生)),
-				| Some(_) => {
-					return Err(Box::new(io::Error::new(
-						io::ErrorKind::InvalidData,
-						format!("Invalid course type of {}", test.md5()),
-					)))
-				}
-				| None => test.get_course(&Course::from(name, None)),
-			};
+			test.get_course(&Course::from(name, r#type))
 		}
 		| None => {
 			return Err(Box::new(io::Error::new(
