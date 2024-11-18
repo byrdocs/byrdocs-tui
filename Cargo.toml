@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = [ "tui", "config", "init", "metadata"]
+members = [ "tui", "config", "init", "metadata", "macros"]
 default-members = [ "tui" ]
 
 [workspace.package]
