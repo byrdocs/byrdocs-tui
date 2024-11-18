@@ -41,7 +41,7 @@ mod tests {
 	}
 	#[test]
 	fn metadata_book() {
-		let _ = match book::read(
+		let book = match book::read(
 			&YamlLoader::load_from_str(include_str!(
 				"../../.assets/06fa27d50ba4a4baae1b665ea48fd677.yml",
 			))
@@ -70,9 +70,32 @@ mod tests {
 					assert_eq!(isbn[0], "978-7-04-023069-7");
 				}
 				assert_eq!(book.filetype(), FileType::Pdf);
+				book
 			}
-			| Err(e) => assert!(false, "{}", e),
+			| Err(e) => return assert!(false, "{}", e)
 		};
+		assert_eq!(
+			metadata::write::book::write(book).unwrap(),"\
+id: 06fa27d50ba4a4baae1b665ea48fd677
+url: https://byrdocs.org/files/06fa27d50ba4a4baae1b665ea48fd677.pdf
+type: book
+data:
+  title: 理论物理学教程 第10卷 物理动理学 第2版
+  authors:
+    - Лифшиц, Евгений Михайлович(粟弗席兹)
+    - Питаевский, Лев Петрович(皮塔耶夫斯基)
+  translators:
+    - 徐锡申
+    - 徐春华
+    - 黄京民
+  edition: '1'
+  publisher: 高等教育出版社
+  publish_year: '2008'
+  isbn:
+    - 978-7-04-023069-7
+  filetype: pdf
+"
+		);
 	}
 	#[test]
 	fn metadata_test() {
