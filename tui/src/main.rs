@@ -75,7 +75,7 @@ mod tests {
 			| Err(e) => return assert!(false, "{}", e),
 		};
 		assert_eq!(
-			metadata::write::book::write(book).unwrap(),
+			metadata::write::write(book).unwrap(),
 			"\
 id: 06fa27d50ba4a4baae1b665ea48fd677
 url: https://byrdocs.org/files/06fa27d50ba4a4baae1b665ea48fd677.pdf
@@ -100,7 +100,7 @@ data:
 	}
 	#[test]
 	fn metadata_test() {
-		let test= match test::read(
+		let test = match test::read(
 			&YamlLoader::load_from_str(include_str!(
 				"../../.assets/154a930358251fe7bf774dd194bd9a00.yml",
 			))
@@ -146,7 +146,7 @@ data:
 			| Err(e) => return assert!(false, "{}", e),
 		};
 		assert_eq!(
-			metadata::write::test::write(test).unwrap(),
+			metadata::write::write(test).unwrap(),
 			"\
 id: 154a930358251fe7bf774dd194bd9a00
 url: https://byrdocs.org/files/154a930358251fe7bf774dd194bd9a00.pdf
@@ -173,7 +173,7 @@ data:
 	}
 	#[test]
 	fn metadata_doc() {
-		let _ = match doc::read(
+		let doc = match doc::read(
 			&YamlLoader::load_from_str(include_str!(
 				"../../.assets/3d6fa4f7305fb91e9c014e468037310c.yml",
 			))
@@ -194,9 +194,27 @@ data:
 				assert_eq!(
 					doc.content()[1],
 					metadata::definitions::pretype::DocContentType::答案
-				)
+				);
+				doc
 			}
-			| Err(e) => assert!(false, "{}", e),
+			| Err(e) => return assert!(false, "{}", e),
 		};
+		assert_eq!(
+			metadata::write::write(doc).unwrap(),
+			"\
+id: 3d6fa4f7305fb91e9c014e468037310c
+url: https://byrdocs.org/files/3d6fa4f7305fb91e9c014e468037310c.pdf
+type: doc
+data:
+  title: 工程制图习题解答
+  filetype: pdf
+  course:
+    - type: null
+      name: 工程图学
+  content:
+    - 题库
+    - 答案
+"
+		);
 	}
 }
