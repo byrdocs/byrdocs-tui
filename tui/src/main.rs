@@ -72,10 +72,11 @@ mod tests {
 				assert_eq!(book.filetype(), FileType::Pdf);
 				book
 			}
-			| Err(e) => return assert!(false, "{}", e)
+			| Err(e) => return assert!(false, "{}", e),
 		};
 		assert_eq!(
-			metadata::write::book::write(book).unwrap(),"\
+			metadata::write::book::write(book).unwrap(),
+			"\
 id: 06fa27d50ba4a4baae1b665ea48fd677
 url: https://byrdocs.org/files/06fa27d50ba4a4baae1b665ea48fd677.pdf
 type: book
@@ -99,7 +100,7 @@ data:
 	}
 	#[test]
 	fn metadata_test() {
-		let _ = match test::read(
+		let test= match test::read(
 			&YamlLoader::load_from_str(include_str!(
 				"../../.assets/154a930358251fe7bf774dd194bd9a00.yml",
 			))
@@ -118,8 +119,12 @@ data:
 				} else {
 					assert!(false, "colleges of {} should not be empty", test.md5());
 				}
-				assert_eq!(test.course().r#type, None);
-				assert_eq!(test.course().name, "概率论与数理统计");
+				if let Some(course) = test.course() {
+					assert_eq!(course.r#type, None);
+					assert_eq!(course.name, "概率论与数理统计");
+				} else {
+					assert!(false, "course of {} should not be empty", test.md5());
+				}
 				assert_eq!(test.time().start, "2023");
 				assert_eq!(test.time().end, "2024");
 				assert_eq!(
@@ -135,10 +140,36 @@ data:
 				assert_eq!(
 					test.content()[0],
 					metadata::definitions::pretype::TestContentType::原题
-				)
+				);
+				test
 			}
-			| Err(e) => assert!(false, "{}", e),
+			| Err(e) => return assert!(false, "{}", e),
 		};
+		assert_eq!(
+			metadata::write::test::write(test).unwrap(),
+			"\
+id: 154a930358251fe7bf774dd194bd9a00
+url: https://byrdocs.org/files/154a930358251fe7bf774dd194bd9a00.pdf
+type: test
+data:
+  title: 2023-2024 第二学期 概率论与数理统计 期末
+  college:
+    - 人工智能学院
+    - 自动化学院
+    - 信息与通信工程学院
+  course:
+    type: null
+    name: 概率论与数理统计
+  time:
+    start: '2023'
+    end: '2024'
+    semester: Second
+    stage: 期末
+  filetype: pdf
+  content:
+    - 原题
+"
+		);
 	}
 	#[test]
 	fn metadata_doc() {

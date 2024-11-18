@@ -68,7 +68,7 @@ pub fn read(yaml: &Yaml) -> Result<Test, Box<dyn Error>> {
 				)))
 			}
 		};
-		test.get_course(&Course::from(name, r#type))?
+		test.get_course(&Some(Course::from(name, r#type)))?
 	}
 	if let Some(time) = yaml["data"]["time"].as_hash() {
 		let start = match time[&Yaml::from_str("start")].as_str() {

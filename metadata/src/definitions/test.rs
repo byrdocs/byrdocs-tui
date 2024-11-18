@@ -6,7 +6,7 @@ pub struct Test {
 	md5: u128,
 	title: String,
 	college: Option<Vec<String>>,
-	course: Course,
+	course: Option<Course>,
 	time: Time,
 	filetype: FileType,
 	content: Vec<TestContentType>,
@@ -18,7 +18,7 @@ impl Test {
 			md5: 0,
 			title: String::new(),
 			college: None,
-			course: Course::new(),
+			course: None,
 			time: Time::new(),
 			filetype: FileType::Pdf,
 			content: Vec::<TestContentType>::new(),
@@ -29,7 +29,7 @@ impl Test {
 			md5,
 			title: String::new(),
 			college: None,
-			course: Course::new(),
+			course: None,
 			time: Time::new(),
 			filetype,
 			content: Vec::<TestContentType>::new(),
@@ -62,7 +62,7 @@ impl Test {
 	pub fn get_college(&mut self, college: &Vec<String>) -> Result<(), Box<dyn Error>> {
 		Ok(self.college = Some(college.clone()))
 	}
-	pub fn get_course(&mut self, course: &Course) -> Result<(), Box<dyn Error>> {
+	pub fn get_course(&mut self, course: &Option<Course>) -> Result<(), Box<dyn Error>> {
 		Ok(self.course = course.clone())
 	}
 	pub fn get_time(&mut self, time: &Time) -> Result<(), Box<dyn Error>> {
@@ -80,7 +80,7 @@ impl Test {
 	pub fn college(&self) -> Option<Vec<String>> {
 		self.college.clone()
 	}
-	pub fn course(&self) -> Course {
+	pub fn course(&self) -> Option<Course> {
 		self.course.clone()
 	}
 	pub fn time(&self) -> Time {
